@@ -4,21 +4,19 @@ import sys
 
 def unpack_line(line):
     list = line.split("|")
+    host = list[1].split("\"")[1]
+    reacttime = list[6].split("\"")[1]
     if len(list) == 7:
         ackat = list[4].split("\"")[1]
-        host = list[1].split("\"")[1]
         user = list[2].split("\"")[1]
         acktext = ''.join(e for e in list[3][list[3].find("\"")+1: list[3].rfind("\"")] if e.isalnum())
-        reacttime = list[6].split("\"")[1]
     elif  len(list) == 8:
         ackat = list[5].split("\"")[1]
-        host = list[1].split("\"")[1]
         user = list[3].split("\"")[1]
         acktext = ''.join(e for e in list[4][list[4].find("\"")+1: list[4].rfind("\"")] if e.isalnum())
-        reacttime = list[6].split("\"")[1]
     else:
         print ("error in parse string: \n", line)
-        return 0;
+        return 0
     return ackat, host, user, acktext, reacttime
 
 dict = {}
@@ -27,12 +25,13 @@ for filename in sys.argv[1:]:
     file = open(filename, 'r')
     for line in file:
         unpack = unpack_line(line)
-        key = unpack[0]+"|"+unpack[2]+"|"+unpack[3]
-        if key in dict.keys():
-            if dict[key] < int(unpack[4]):
+        if unpack != 0:
+            key = unpack[0]+"|"+unpack[2]+"|"+unpack[3]
+            if key in dict.keys():
+                if dict[key] < int(unpack[4]):
+                    dict[key] = int(unpack[4])
+            else:
                 dict[key] = int(unpack[4])
-        else:
-            dict[key] = int(unpack[4])
     file.close()
 
 dict2 = {}
