@@ -5,16 +5,16 @@ import sys
 def unpack_line(line):
     list = line.split("|")
     if len(list) == 7:
-        ackat = list[4]
+        ackat = list[4].split("\"")[1]
         host = list[1].split("\"")[1]
         user = list[2].split("\"")[1]
-        acktext = list[3][list[3].find("\"")+1: list[3].rfind("\"")]
+        acktext = ''.join(e for e in list[3][list[3].find("\"")+1: list[3].rfind("\"")] if e.isalnum())
         reacttime = list[6].split("\"")[1]
     elif  len(list) == 8:
-        ackat = list[5]
+        ackat = list[5].split("\"")[1]
         host = list[1].split("\"")[1]
         user = list[3].split("\"")[1]
-        acktext = list[4][list[4].find("\"")+1: list[4].rfind("\"")]
+        acktext = ''.join(e for e in list[4][list[4].find("\"")+1: list[4].rfind("\"")] if e.isalnum())
         reacttime = list[6].split("\"")[1]
     else:
         print ("error in parse string: \n", line)
